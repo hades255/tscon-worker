@@ -4,6 +4,7 @@
 
 # --- Startup ---
 START_DELAY_SEC = 20.0  # Seconds to wait before first action
+TSCON_DELAY_SEC = 20.0  # Seconds to wait before tscon action
 
 # --- Delays between actions (random in this range) ---
 DELAY_MIN_SEC = 0.5

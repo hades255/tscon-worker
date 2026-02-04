@@ -466,8 +466,8 @@ def _on_toggle_key():
         print("Off.")
 
     if _enabled and getattr(config, "RUN_TSCON_AT_STARTUP", False):
-        print(f"new session in {config.START_DELAY_SEC} seconds...")
-        time.sleep(config.START_DELAY_SEC)
+        print(f"new session in {config.TSCON_DELAY_SEC} seconds...")
+        time.sleep(config.TSCON_DELAY_SEC)
         if run_tscon_to_console():
             print("Session moved to console.")
         else:
