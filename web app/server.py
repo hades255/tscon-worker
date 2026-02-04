@@ -17,9 +17,9 @@ import psutil
 import win32gui
 import win32process
 
-import config
-from window_test import get_active_window_info
-from mouse_test import (
+import index as config
+from server_side_rendering import get_active_window_info
+from hot_reloading import (
     move_mouse_absolute,
     smooth_move,
     click_mouse,
@@ -168,7 +168,7 @@ def do_idle_action():
         y = config.IDLE_TOP_LEFT_OFFSET_Y
         move_mouse_absolute(x, y)
     random_delay()
-    click_mouse()
+    # click_mouse()
     random_delay()
 
 

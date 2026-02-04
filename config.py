@@ -18,6 +18,7 @@ VS_CODE_REGION = (400, 150, 800, 600)
 
 # --- Chrome: mouse move region (min_x, min_y, max_x, max_y) in pixels ---
 CHROME_REGION = (100, 100, 600, 600)
+CHROME_SEARCH_KEYWORDS = []
 
 # --- After right-click: move this many pixels left, then left-click to close menu ---
 CONTEXT_MENU_OFFSET_LEFT_PX = 10
@@ -390,7 +391,9 @@ RUN_TIME_RANDOM_MINUTES = 30
 TOGGLE_KEY = "f12"  # key to toggle bot on/off (e.g. "f12", "ctrl+shift+a")
 
 # --- At startup: move RDP session to console (so Hubstaff keeps tracking after disconnect) ---
-RUN_TSCON_AT_STARTUP = False  # set True on VPS so bot runs tscon once at start; RDP will close
+RUN_TSCON_AT_STARTUP = (
+    False  # set True on VPS so bot runs tscon once at start; RDP will close
+)
 
 # --- When not running: activate this process and click top-right corner ---
 IDLE_TARGET_PROCESS = "HubstaffClient.exe"  # find and activate this window when idle
