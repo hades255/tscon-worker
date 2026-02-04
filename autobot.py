@@ -433,6 +433,7 @@ def _on_toggle_key():
     if new_enabled:
         print(f"toggle in {config.START_DELAY_SEC} seconds...")
         time.sleep(config.START_DELAY_SEC)
+        print("start:", datetime.now())
     _enabled = new_enabled
     if _enabled and config.RUN_MODE == "mins":
         _enabled_since = time.time()
@@ -529,6 +530,7 @@ def main():
         while True:
             if not _should_run():
                 if not _idle_action_done:
+                    print("idle:", datetime.now())
                     do_idle_action()
                     _idle_action_done = True
                 time.sleep(0.5)

@@ -18,7 +18,7 @@ VS_CODE_REGION = (400, 150, 800, 600)
 
 # --- Chrome: mouse move region (min_x, min_y, max_x, max_y) in pixels ---
 CHROME_REGION = (100, 100, 600, 600)
-CHROME_SEARCH_KEYWORDS = []
+CHROME_SEARCH_KEYWORDS = ["search for something"]
 
 # --- After right-click: move this many pixels left, then left-click to close menu ---
 CONTEXT_MENU_OFFSET_LEFT_PX = 10
