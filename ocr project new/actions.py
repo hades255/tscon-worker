@@ -51,7 +51,7 @@ VS_CODE_FILE_NAMES = [
 ]
 # --- Text options for VS Code: list of lines; bot picks 1 to N random lines and types them ---
 VS_CODE_TEXTS_LINES_MIN = 1
-VS_CODE_TEXTS_LINES_MAX = 20
+VS_CODE_TEXTS_LINES_MAX = 10 # 20
 VS_CODE_TEXTS = (
     """
 base_file_name = file_name.rsplit(".", 1)[0]
