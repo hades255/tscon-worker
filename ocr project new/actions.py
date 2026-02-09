@@ -2,13 +2,15 @@
 # Auto-bot configuration – edit this file to change behavior
 # =============================================================================
 
+SPEED = 1
+
 # --- Startup ---
 START_DELAY_SEC = 20.0  # Seconds to wait before first action
 TSCON_DELAY_SEC = 20.0  # Seconds to wait before tscon action
 
 # --- Delays between actions (random in this range) ---
-DELAY_MIN_SEC = 2.0 # 0.5
-DELAY_MAX_SEC = 4.0 # 2.0
+DELAY_MIN_SEC = 0.5 * SPEED
+DELAY_MAX_SEC = 2.0 * SPEED
 
 # --- Process names (case-insensitive match on exe name) ---
 VS_CODE_PROCESS_NAMES = ["Code.exe"]
@@ -51,7 +53,7 @@ VS_CODE_FILE_NAMES = [
 ]
 # --- Text options for VS Code: list of lines; bot picks 1 to N random lines and types them ---
 VS_CODE_TEXTS_LINES_MIN = 1
-VS_CODE_TEXTS_LINES_MAX = 20 # 20
+VS_CODE_TEXTS_LINES_MAX = 20
 VS_CODE_TEXTS = (
     """
 base_file_name = file_name.rsplit(".", 1)[0]
@@ -221,8 +223,8 @@ return rotated
 ).split("\n")
 
 # --- Mouse: smooth move ---
-SMOOTH_MOVE_DURATION_MIN = 0.5
-SMOOTH_MOVE_DURATION_MAX = 1.5
+SMOOTH_MOVE_DURATION_MIN = 0.5 * SPEED
+SMOOTH_MOVE_DURATION_MAX = 1.5 * SPEED
 SMOOTH_MOVE_STEPS = 80
 
 # --- Scroll: wheel delta (positive = up, negative = down); amount randomized ---
@@ -231,7 +233,7 @@ SCROLL_MULTIPLIER_MIN = 1
 SCROLL_MULTIPLIER_MAX = 4
 
 # --- Typing (VS Code) ---
-TYPING_DELAY_PER_CHAR = 0.3 # 0.1
+TYPING_DELAY_PER_CHAR = 0.1 * SPEED
 
 # --- Alt+Tab: hold Alt and press Tab N times (random in this range) ---
 ALT_TAB_COUNT_MIN = 1
