@@ -231,15 +231,16 @@ def do_vs_code_cycle():
         config.SMOOTH_MOVE_DURATION_MIN, config.SMOOTH_MOVE_DURATION_MAX
     )
     random_delay()
-    smooth_move(
-        start_x,
-        start_y,
-        end_x,
-        end_y,
-        duration=duration,
-        steps=config.SMOOTH_MOVE_STEPS,
-    )
-    random_delay()
+    if random.choice([True, False]):
+        smooth_move(
+            start_x,
+            start_y,
+            end_x,
+            end_y,
+            duration=duration,
+            steps=config.SMOOTH_MOVE_STEPS,
+        )
+        random_delay()
     if random.choice([True, False]):
         do_random_scroll()
     if random.choice([True, False]):
@@ -313,15 +314,16 @@ def do_chrome_cycle():
         config.SMOOTH_MOVE_DURATION_MIN, config.SMOOTH_MOVE_DURATION_MAX
     )
     random_delay()
-    smooth_move(
-        start_x,
-        start_y,
-        end_x,
-        end_y,
-        duration=duration,
-        steps=config.SMOOTH_MOVE_STEPS,
-    )
-    random_delay()
+    if random.choice([True, False]):
+        smooth_move(
+            start_x,
+            start_y,
+            end_x,
+            end_y,
+            duration=duration,
+            steps=config.SMOOTH_MOVE_STEPS,
+        )
+        random_delay()
 
     if random.choice([True, False]):
         do_random_scroll()

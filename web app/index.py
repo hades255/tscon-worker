@@ -2,7 +2,7 @@
 # Auto-bot configuration – edit this file to change behavior
 # =============================================================================
 
-SPEED = 8
+SPEED = 10
 
 # --- Startup ---
 START_DELAY_SEC = 20.0  # Seconds to wait before first action

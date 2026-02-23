@@ -22,203 +22,223 @@ VS_CODE_REGION = (400, 150, 1000, 600)
 # --- Chrome: mouse move region (min_x, min_y, max_x, max_y) in pixels ---
 CHROME_REGION = (300, 100, 1000, 600)
 CHROME_SEARCH_KEYWORDS = [
-    "opencv image processing-save byte to png",
-    "save image from byte to png cause quality loss",
-    "methods to save bytes to png or jpeg without quality lose",
-    "remove background from image using opencv",
-    "result format of rembg library remove function",
-    "rotating and deskewing images using opencv",
-    "cropping image to content using opencv",
-    "converting png to jpeg with white background using opencv",
-    "rotate 90/180/270 jpeg without quality loss using opencv",
-    "rotate and re-save losslessly",
-    "read image without opencv",
+    "How to implement Twilio Verify API for SMS phone verification in my tech stack?",
+    "How to buy a domain and connect it to a hosting provider like Vercel or AWS?",
+    "How to implement social media sharing for TikTok and Instagram Stories in a web app?",
+    "How to programmatically add a logo watermark and CTA overlay to a video file?",
+    "What are the integration steps for Persona KYC and how to handle verification webhooks?",
+    "How to configure a production SMTP service like SendGrid or Amazon SES to avoid sandbox limits?",
+    "How to build a sequential file upload button that triggers the next upload without a page refresh?",
+    "How to design a transaction history UI with data fetching from a financial database?",
+    "How to improve image loading performance using WebP, lazy loading, and CDN integration?",
+    "How to create a zoomed-in admin interface to set specific coordinates for a scratchable canvas area?",
 ]
 
 # --- After right-click: move this many pixels left, then left-click to close menu ---
 CONTEXT_MENU_OFFSET_LEFT_PX = 10
 
 VS_CODE_FILE_NAMES = [
-    "apiadmin_router",
-    "game_router",
-    "gamegamerouter",
-    "ticketsrouter",
-    "controllersimagecontroller",
-    "processorsimagenormalizer",
-    "ticketprocessor",
-    "servicesimagenotifi",
-    "s3manager",
-    "gameapiscratchordersrouter",
-    "gameapiplayersrouter",
+    "ImageUploadPage.jsx ",
+    "Sidebar.jsx ",
+    "UserDetailPage.jsx ",
+    "UsersPage.jsx ",
+    ".env",
+    "index.html",
+    "GameForm.jsx ",
+    "PageHeader.jsx ",
+    "FilterBar.jsx ",
+    "LogsPage.jsx ",
+    "logs.js ",
+    "LogDetailPage.jsx ",
+    "H+",
+    "LOGS_API.md ",
+    "App.jsx ",
+    "index.js ",
 ]
 # --- Text options for VS Code: list of lines; bot picks 1 to N random lines and types them ---
 VS_CODE_TEXTS_LINES_MIN = 1
 VS_CODE_TEXTS_LINES_MAX = 20
 VS_CODE_TEXTS = (
     """
-base_file_name = file_name.rsplit(".", 1)[0]
 
-if base_file_name.endswith("_READY"):
-pass
-else:
-ready_file_name = f"{base_file_name}_READY"
+.finally(() => {
+if (!cancelled) setPendingLoading(false);
+});
+return () => {
+cancelled = true;
+};
+}, []);
 
-ext = ""
-new_file_name = ""
-if "." in file_name:
-ext = "." + file_name.rsplit(".", 1)[1]
-new_file_name = f"{ready_file_name}{ext}"
-else:
-new_file_name = f"{ready_file_name}.jpeg"
+const handleFileSelect = async (role, file) => {
+if (!file) return;
+setLoading((prev) => ({ ...prev, [role]: true }));
+setErrors((prev) => ({ ...prev, [role]: null }));
+setResponses((prev) => ({ ...prev, [role]: null }));
 
-from ..main import (
-app,
-)
-from rembg import remove
-from ..controllers.image_controller import (
-crop_to_content,
-deskew_png_to_right_angles,
-png_to_jpeg_white_bg,
-)
+try {
+const data = await uploadImage(file);
+setResponses((prev) => ({ ...prev, [role]: data }));
+} catch (err) {
+setErrors((prev) => ({
+...prev,
+[role]: err.message || "Upload failed",
+}));
+} finally {
+setLoading((prev) => ({ ...prev, [role]: false }));
+}
+};
 
-s3_manager = getattr(app.state, "s3_manager", None)
-if not s3_manager:
-return {"status": "error", "reason": "S3 not configured"}
+const handleInputChange = (role, e) => {
+const file = e.target.files?.[0];
+if (file) handleFileSelect(role, file);
+e.target.value = "";
+};
 
-image_bytes = s3_manager.read_file(file_key)
-if not image_bytes:
-return {"status": "error", "reason": f"Could not read file: {file_key}"}
-
-try:
-output = remove(image_bytes)
-output = deskew_png_to_right_angles(output)
-output = crop_to_content(output, margin_px=0)
-output = png_to_jpeg_white_bg(output, quality=88)
-except Exception as e:
-return {"status": "error", "reason": f"Image processing failed: {e!s}"}
-
-if not _FOLDER_ROLE_PATTERN.match(foldername):
-raise HTTPException(
-status_code=status.HTTP_400_BAD_REQUEST,
-detail="foldername must contain only letters, numbers, underscore, hyphen, period",
-)
-s3_manager = getattr(request.app.state, "s3_manager", None)
-if not s3_manager:
-raise HTTPException(
-status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-detail="S3 not configured",
-)
-roles_files = [
-("FA", file_fa),
-("FB", file_fb),
-("B", file_b),
-]
-uploaded: list[dict[str, str]] = []
-s3_manager.create_folder(foldername)
-for role, upload in roles_files:
-content_type = upload.content_type or ""
-if not content_type.startswith("image/"):
-raise HTTPException(
-status_code=status.HTTP_400_BAD_REQUEST,
-detail=f"File for {role} must be an image (got {content_type})",
-)
-data = upload.file.read()
-if not data:
-raise HTTPException(
-status_code=status.HTTP_400_BAD_REQUEST,
-detail=f"File for {role} is empty",
-)
-ext = _extension_from_filename(upload.filename)
-s3_key = f"{foldername}/{foldername}_{role}_READY.{ext}"
-ct = _content_type_for_ext(ext)
-s3_manager.write_file(s3_key, data, content_type=ct)
-uploaded.append({"role": role, "s3_key": s3_key})
-return {
-"foldername": foldername,
-"uploaded": uploaded,
+const handleUploadAll = async () => {
+const { fa, fb, b } = responses;
+if (!fa?.image_base64 || !fb?.image_base64 || !b?.image_base64) {
+setUploadAllError(
+"Upload and process FA, FB, and B images first (select a file for each)."
+);
+return;
+}
+const name =
+(selectedFolderName || "").trim().replace(/[^\w.-]/g, "_") || "";
+if (!name) {
+setUploadAllError("Pick a pending ticket from the dropdown.");
+return;
 }
 
-arr = np.frombuffer(png_bytes, dtype=np.uint8)
-img = cv2.imdecode(arr, cv2.IMREAD_UNCHANGED)
-if img is None or img.ndim != 3:
-return png_bytes
-h, w = img.shape[:2]
-if img.shape[2] == 4:
-alpha = img[:, :, 3] / 255.0
-rgb = img[:, :, :3]
-white = np.ones_like(rgb) * 255
-blended = (
-rgb * alpha[:, :, np.newaxis] + white * (1 - alpha[:, :, np.newaxis])
-).astype(np.uint8)
-else:
-blended = img[:, :, :3]
-_, out_bytes = cv2.imencode(".jpg", blended, [cv2.IMWRITE_JPEG_QUALITY, quality])
-if out_bytes is None:
-return png_bytes
-return out_bytes.tobytes()
+setUploadAllLoading(true);
+setUploadAllError(null);
+setUploadAllResult(null);
 
+try {
+const fileFa = base64ToFile(
+fa.image_base64,
+fa.content_type || "image/png",
+"fa"
+);
+const fileFb = base64ToFile(
+fb.image_base64,
+fb.content_type || "image/png",
+"fb"
+);
+const fileB = base64ToFile(
+b.image_base64,
+b.content_type || "image/png",
+"b"
+);
 
+const result = await uploadImagesThree(name, fileFa, fileFb, fileB);
+setUploadAllResult(result);
+if (selectedTicket?.id) {
+setUploadedTicketIds((prev) => new Set([...prev, selectedTicket.id]));
+}
+setResponses({ fa: null, fb: null, b: null });
+setSelectedTicket(null);
+} catch (err) {
+setUploadAllError(err.message || "Upload failed");
+} finally {
+setUploadAllLoading(false);
+}
+};
 
-def _get_best_fit_ratio(self, H: int, W: int) -> list[int, int]:
-known_ratios = []
-for w_k, h_k in KNOWN_HW:
-if h_k == 0:
-ratio_k = float("inf")
-else:
-ratio_k = w_k / h_k
-known_ratios.append({"ratio": ratio_k, "pair": [w_k, h_k]})
+const canUploadAll =
+responses.fa?.image_base64 &&
+responses.fb?.image_base64 &&
+responses.b?.image_base64;
 
-if H == 0:
-R_i = float("inf")
-else:
-R_i = W / H
+useEffect(() => {
+function handleClickOutside(e) {
+if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+setDropdownOpen(false);
+}
+}
+if (dropdownOpen) {
+document.addEventListener("mousedown", handleClickOutside);
+return () =>
+document.removeEventListener("mousedown", handleClickOutside);
+}
+}, [dropdownOpen]);
 
-min_diff = float("inf")
-best_match_pair = [W, H]
+return (
+<div className="space-y-6">
+<PageHeader
+title="Image upload"
+description="Select FA, FB, and B ticket images. Each is uploaded and processed (Background removal + Skew correction); then upload all three to the server."
+/>
 
-for known in known_ratios:
-R_k = known["ratio"]
-W_k, H_k = known["pair"]
-
-diff_direct = abs(R_i - R_k)
-
-if R_k != 0:
-R_k_inv = 1 / R_k
-diff_inverse = abs(R_i - R_k_inv)
-else:
-diff_inverse = float("inf")
-
-if diff_direct < min_diff:
-min_diff = diff_direct
-best_match_pair = [W_k, H_k]
-
-if diff_inverse < min_diff:
-min_diff = diff_inverse
-
-best_match_pair = [H_k, W_k]
-
-ratio = best_match_pair
-return [min(ratio), max(ratio)]
-
-def _rotate_image(self, image: np.ndarray, angle: float) -> np.ndarray:
-(h, w) = image.shape[:2]
-
-center = (w // 2, h // 2)
-
-M = cv2.getRotationMatrix2D(center, angle, 1.0)
-
-cos = np.abs(M[0, 0])
-sin = np.abs(M[0, 1])
-
-nW = int((h * sin) + (w * cos))
-nH = int((h * cos) + (w * sin))
-
-M[0, 2] += (nW / 2) - center[0]
-M[1, 2] += (nH / 2) - center[1]
-
-rotated = cv2.warpAffine(image, M, (nW, nH))
-
-return rotated
+<div className="rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
+<label className="mb-2 block text-sm font-medium text-slate-700">
+S3 folder (for final upload)
+</label>
+{pendingLoading ? (
+<LoadingSpinner label="Loading pending tickets…" />
+) : pendingError ? (
+<div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+{pendingError}
+</div>
+) : null}
+{!pendingLoading && (
+<div ref={dropdownRef} className="relative max-w-2xl">
+<button
+type="button"
+onClick={() => setDropdownOpen((open) => !open)}
+className="flex w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-left text-sm shadow-sm hover:bg-slate-50"
+>
+<span className="truncate">
+{selectedTicket
+? `${
+selectedTicket.game_name ?? selectedTicket.ticket_ref
+} — (${selectedTicket.s3_folder_name})`
+: "Select pending ticket…"}
+</span>
+<span className="ml-2 text-slate-400">
+{dropdownOpen ? "▴" : "▾"}
+</span>
+</button>
+{dropdownOpen && (
+<div className="absolute z-10 mt-1 max-h-80 w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg">
+<div className="sticky top-0 border-b border-slate-100 bg-white p-2">
+<input
+type="text"
+value={dropdownSearch}
+onChange={(e) => setDropdownSearch(e.target.value)}
+placeholder="Search s3_folder_name…"
+className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+onClick={(e) => e.stopPropagation()}
+/>
+</div>
+<div className="max-h-64 overflow-auto py-1">
+{pendingTickets.length === 0 ? (
+<div className="px-3 py-4 text-center text-sm text-slate-500">
+No pending tickets
+</div>
+) : filteredPendingTickets.length === 0 ? (
+<div className="px-3 py-4 text-center text-sm text-slate-500">
+No tickets matching &quot;{dropdownSearch}&quot;
+</div>
+) : (
+filteredPendingTickets.map((t) => {
+const isUploaded = uploadedTicketIds.has(t.id);
+return (
+<button
+key={t.id}
+type="button"
+disabled={isUploaded}
+onClick={() => {
+if (isUploaded) return;
+setSelectedTicket(t);
+setDropdownOpen(false);
+}}
+className={`w-full px-3 py-2.5 text-left text-sm ${
+isUploaded
+? "cursor-not-allowed bg-slate-50 text-slate-400"
+: selectedTicket?.id === t.id
+? "bg-slate-100 hover:bg-slate-50"
+: "hover:bg-slate-50"
+}`}
     """
 ).split("\n")
 
